@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.sale.form.inherit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_uom_qty']" position="after">
+                </xpath>
+                <field name="payment_term_id" position="after">
+                     <field name="origin" readonly="id"/>
+                    <field name="markup" />
+                    <label for="task_timer"/>
+                    <div class="o_row" style="display: inline-block;">
+                        <field name="task_timer" widget="boolean_toggle" invisible="1"/>
+                    </div>
+                </field>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_template_id']" position="after">
+				    <field name="cdx_bom_id" domain="[('product_tmpl_id','=',product_template_id)]" invisible="0" context="{'default_product_tmpl_id': product_template_id}" readonly="parent.state not in ['draft']" widget="many2one" options="{'no_create': True, 'no_quick_create': True, 'can_create': True}"/>
+                    <button string="Bom" name="generate_bom" type="object" class="oe_highlight"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                    <field name="markup"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='product_template_id']" position="attributes">
+                    <attribute name="context">{'partner_id': parent.partner_id,'quantity': product_uom_qty,'pricelist': parent.pricelist_id,'uom':product_uom,'company_id': parent.company_id,'default_list_price': price_unit,'default_description_sale': name,'default_detailed_type': 'product','default_product_group': 'fg'}</attribute>
+                    <attribute name="domain">[('sale_ok', '=', True),('product_group','!=','rm')]</attribute>
+                </xpath>
+
+                <xpath expr="//header" position="inside">
+                    <button string="Advance Payment" type="object" name="action_advance_payment" class="btn-primary" invisible="state not in ['draft', 'sent','sale'] or amount_due &lt;= 0"/>
+                    <field name="show_timer" invisible="1"/>
+                    <label for="duration" invisible="show_timer != True"/>
+                    <div>
+                        <field name="duration" id="duration" widget="task_timer"
+                               style="color: red;" invisible="show_timer != True"/>
+                    </div>
+                    <field name="is_user_working" invisible="1"/>
+                </xpath>
+                <xpath expr="//page[@name='customer_signature']" position="after">
+                    <page string="Account Payment">
+                        <field name="payment_line" nolabel="1" readonly="1">
+                            <tree editable="bottom">
+                                <field name="sale_id" invisible="1"/>
+                                <field name="ref"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="partner_id"/>
+                                <field name="date"/>
+                                <field name="create_uid"/>
+                                <field name="create_date"/>
+                                <field name="journal_id"/>
+                                <field name="state" invisible="1"/>
+                                <field name="payment_method_id"/>
+                                <field name="amount" sum="amount"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page name="timesheet" string="Timesheet">
+                        <field name="timesheet_ids" nolabel="1" >
+                            <tree >
+                                <field name="readonly_timesheet" column_invisible="True"/>
+                                <field name="date" readonly="readonly_timesheet"/>
+                                <field name="user_id"/>
+                                <field name="unit_amount" widget="timesheet_uom" string="Time Spent" decoration-danger="unit_amount &gt; 24 or unit_amount &lt; 0" readonly="readonly_timesheet"/>
+
+                            </tree>
+                        </field>
+                    </page>
+                </xpath>
+
+                <xpath expr="//sheet/div[@name='button_box']" position="inside">
+                    <button name="action_view_payment" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="payment_count == 0">
+                        <field name="payment_count" widget="statinfo" string="Payments"/>
+                        <field name="cdx_payment_state" invisible="1"/>
+                    </button>
+                </xpath>
+                <xpath expr="//div[@name='button_box']" position="after">
+
+                    <widget name="web_ribbon" title="Paid" invisible="cdx_payment_state != 'paid'"/>
+                    <widget name="web_ribbon" title="Partial" invisible="cdx_payment_state != 'partial'"/>
+                </xpath>
+                <field name="tax_totals" position="after">
+                    <field name="paid_amount"/>
+                    <field name="amount_due"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

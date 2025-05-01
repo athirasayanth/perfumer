@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account.action_report_payment_receipt" model="ir.actions.report">
+        <field name="name">Receipt Voucher</field>
+    </record>
+    <template id="report_payment_receipt_document_new" name="report_payment_receipt_document" inherit_id="account.report_payment_receipt_document">
+        <xpath expr="//strong[@id='payment_title']" position="replace">
+            <strong id="payment_title">Receipt Voucher: <span t-field="o.name">INV0001</span></strong>
+        </xpath>
+    </template>
+</odoo>

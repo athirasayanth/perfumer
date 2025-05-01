@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_dynamic_approve_config,dynamic.approve.config,model_dynamic_approve_config,,1,1,1,1
+access_dynamic_approve_config_line,dynamic.approve.config.line,model_dynamic_approve_config_line,,1,1,1,1

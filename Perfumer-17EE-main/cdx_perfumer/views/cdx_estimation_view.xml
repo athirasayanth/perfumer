@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    	<record id="estimation_form_view" model="ir.ui.view">
+		<field name="name">Estimation Form</field>
+		<field name="model">cdx.estimation</field>
+		<field name="arch" type="xml">
+			<form string="Estimation">
+				<header>
+					<button name="action_create_quotation" string="Create Quotation" class="oe_highlight"
+						type="object" invisible="state not in ['confirm']"/>
+					<button name="action_confirm" string="Confirm"
+						type="object" class="oe_highlight" invisible="state  in ['quotation','confirm']"/>
+					<!-- <button name="action_mark_as_draft" string="Mark As Draft" 
+						class="oe_highlight" type="object" invisible="state not in ['confirm']"/> -->
+					<field name="state" statusbar_visible="draft,confirm,quotation" widget="statusbar"/>
+				</header>
+				<sheet>
+					<div class="oe_button_box" name="button_box">
+						<button name="action_view_sale_order" string="Quotation" type="object"
+						class="oe_stat_button" icon="fa-files-o" invisible="state  not in ['quotation']"
+						>
+						<div class="o_stat_info">
+							<!-- <field name="sale_count" widget="statinfo" string="Quotations"/> -->
+						</div>
+					</button>
+					</div>
+					<div class="oe_title">
+	                    <h1>
+	                        <field name="name" readonly="1"/>
+	                    </h1>
+	                </div>
+		            <group name="estimation_header">
+						<group>
+							<field name="partner_id"/>
+							<field name="opportunity_id"/>
+							<field name="user_id"/>
+							<field name="cdx_is_quotation_assigned" invisible="1" />
+						</group>
+						<group>
+							<field name="estimation_date"/>
+							<field name="confirmed_date" readonly="1"/>
+							<field name="sale_id" invisible="state in ['draft','confirm']" readonly="1"/>
+							<label for="assign_user_id" string="Assigned salesperson" invisible="not sale_id" readonly="cdx_is_quotation_assigned"/>
+                    	<div>
+                        	<field name="assign_user_id" invisible="not sale_id" class="oe_inline" readonly="cdx_is_quotation_assigned"/>
+							<button name="cdx_assign_user_to_quotation" invisible="not sale_id or cdx_is_quotation_assigned" string="Assign" type="object" class="oe_hightlight"/>                     		
+						</div>
+    
+						</group>
+					</group>
+					<notebook>
+						<page string="Estimation Lines">
+						<group></group>
+						<group>
+						<field name="file_upload" filename="file_name" readonly="state in ['confirmed','quotation']"/>
+							<button name="action_import_estimation_lines" type="object" string="Import Estimation Lines"
+                        class="btn-primary" icon="fa-upload" invisible="state not in ['draft']"/>
+						</group>
+							<field name="estimation_ids" widget="section_and_note_one2many">
+								<tree editable="bottom" string="Estimation Lines" >
+									<control>
+                                        <create name="add_product_control" string="Add a product"/>
+	                                    <create name="add_section_control" string="Add a section" context="{'default_display_type': 'line_section'}"/>
+	                                    <create name="add_note_control" string="Add a note" context="{'default_display_type': 'line_note'}"/>
+	                                        
+                                    </control>
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="display_type" column_invisible="True"/>
+                                    <field name="product_id" required="not display_type"/>
+                                    <field name="name"/>
+                                    <!-- <button name="action_open_bom_view" string="BOM"  -->
+                                    	<!-- type="object" class="oe_highlight"  invisible="display_type == 'line_section'"/> -->
+                                    
+                                    <field name="product_uom_qty" sum="Total"/>
+                                    <field name="product_uom_id"  required="not display_type"/>
+									<field name="hw_sw"/>
+									<field name="for_currency_id" />
+									<field name="unit_cost_fc"/>
+									<field name="unit_cost_usd"/>
+									<field name="vendor_disc"/>
+									<field name="total_cost" string="Total Cost after Std disc"/>
+									<field name="unit_cost_after_addl_disc"/>
+									<field name="total_cost" sum="Total"/>
+									<field name="handling_charges"/>
+									<field name="handling_charges_amt"/>
+									<field name="ins_warr"/>
+									<field name="ins_warr_amt"/>
+									<field name="freight_per"/>
+									<field name="freight_amount"/>
+									<field name="cd_wh_tax_per"/>
+									<field name="cd_wh_tax_amt"/>
+									<field name="finance_charges_per"/>
+									<field name="finance_charges_amt"/>
+									<field name="delivery_charges_per"/>
+									<field name="delivery_charges_amt"/>
+									<field name="other_costs_per"/>
+									<field name="other_costs_amt" sum="Total"/>
+									<field name="unit_landed_cost" sum="Total"/>
+									<field name="total_landed_cost" sum="Total"/>
+							        <field name="markup"  invisible="display_type == 'line_section'"/>
+									<field name="unit_sale_price" sum="Total"/>
+									<field name="price_subtotal" sum="Total"/>
+									<!-- <field name="unit_price" invisible="display_type == 'line_section'"/> -->
+                                    <!-- <field name="markup_cost" column_invisible="True"  
+                                    	invisible="display_type == 'line_section'"/>
+                                    <field name="negotiation" invisible="display_type == 'line_section'"/>
+                                    <field name="negotiation_amount" invisible="display_type == 'line_section'"/>
+                                    <field name="subtotal" invisible="display_type == 'line_section'"/> -->
+								</tree>
+							</field>
+							<group name="note_group" col="6" class="mt-2 mt-md-0">
+	                            <group class="oe_subtotal_footer oe_right" colspan="2">
+	                                <field name="total" readonly="1"/>
+	                            </group>
+	                        </group>
+						</page>
+					</notebook>
+				</sheet>
+				  <chatter/>
+			</form>
+		</field>
+	</record>
+
+	<record id="estimation_tree_view" model="ir.ui.view">
+		<field name="name">Estimation Tree</field>
+		<field name="model">cdx.estimation</field>
+		<field name="arch" type="xml">
+			<tree>
+				<field name="name"/>
+				<field name="estimation_date"/>
+				<field name="partner_id"/>
+				<field name="opportunity_id"/>
+				<field name="state"/>
+			</tree>
+		</field>
+	</record>
+
+	<record id="estimation_search_filter" model="ir.ui.view">
+		<field name="name">estimation.tree.fiter</field>
+		<field name="model">cdx.estimation</field>
+		<field name="priority" eval="15"/>
+		<field name="arch" type="xml">
+			<search string="Estimation Search">
+				<field name="name" string="Estimation"
+                    filter_domain="[('name', 'ilike', self)]"/>
+                <field name="partner_id" operator="child_of"/>
+				<group expand="0" string="Group By">
+                    <filter string="Salesperson" name="salesperson" domain="[]" context="{'group_by': 'user_id'}"/>
+                    <filter name="customer" string="Customer" domain="[]" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Date" name="order_month" domain="[]" context="{'group_by': 'estimation_date'}"/>
+                </group>
+			</search>
+		</field>
+	</record>
+
+    <record id="cdx_estimation_action" model="ir.actions.act_window">
+        <field name="name">Estimation</field>
+        <field name="res_model">cdx.estimation</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem id="menu_estimation"  name="Estimation"  web_icon="cdx_perfumer,static/description/estimation.png"/>
+    <menuitem
+        id="menu_estimation_meny"
+        name="Estimation"
+        parent="menu_estimation"
+        action="cdx_estimation_action"
+        sequence="1"/>
+    </data>
+</odoo>

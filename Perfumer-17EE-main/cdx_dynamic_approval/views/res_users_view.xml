@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="_user_notif_form_view_inherit" model="ir.ui.view">
+        <field name="name">res.users.inherit.form.view</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form" />
+        <field name="arch" type="xml">
+             <xpath expr="//notebook/page[@name='preferences']" position="after">
+                <page string="Notification" name="noti_operation" >
+                    <group>
+                        <group>
+                            <field name="deactivate"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

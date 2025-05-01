@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<template id="template" xml:space="preserve">
+    <t t-name="cdx_perfumer.bom" >
+        <div style="text-align: center;" >
+            <button  id="send_request" type="button" class="btn btn-primary" t-on-click="(ev) => this.onInfoClick(ev)">
+               BOM 
+            </button>
+
+        </div>
+
+    </t>
+
+
+<t t-name="cdx_perfumer.estimation_popup_template">
+    <Dialog title="">
+        <div class="o_estimation_popup">
+            <table class="table table-bordered">
+                <thead style="text-align: center;">
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Available</th>
+                        <th>Selected Quantity</th>
+                        <th>Total Sale Price (AED)</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="index" t-value="1"/>
+                    <t t-foreach="state.estimationLines" t-as="line" t-key="line.id">
+                        <tr t-if="line.remaining_qty &gt; 0">
+                            <td style="text-align: center;"><t t-esc="index"/></td>
+                            <td><t t-esc="line.product_id[1]"/></td>
+                            <td style="text-align: center;"><t t-esc="line.remaining_qty"/></td>
+                            <td style="text-align: center;">
+                                <input style="text-align: center;width: 100px;display: inline-block;" t-att-value="line.new_qty" type="number"  t-on-change="(ev) => this.updateQuantity(line.id, ev)"/>
+                            </td>
+                            <td style="text-align: center;"><t t-esc="line.price_subtotal"/></td>
+                            <td style="text-align: center;">
+                                    <input type="checkbox" t-att-checked="line.selected" t-on-change="(ev) => this.toggleSelection(line.id,ev)"/>
+                            </td>
+                            </tr>
+                            <t t-set="index" t-value="index + 1"/>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="text-end">
+                 <span
+                        name="sale_combo_configurator_total"
+                        class="h4 mb-0"
+                        t-out="Total_price"
+                    />
+                </div>
+                    <t t-set-slot="footer">
+                    <button class="btn btn-primary" t-on-click="(ev) => this.confirmSelection(ev)" >Confirm</button>
+                    <button class="btn btn-secondary" t-on-click="props.close">Cancel</button>
+            </t>
+            </div>
+        </Dialog>
+    </t>
+</template>

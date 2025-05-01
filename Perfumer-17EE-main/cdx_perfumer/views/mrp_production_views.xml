@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data>
+    <record id="mrp_production_form_view_mr" model="ir.ui.view">
+        <field name="name">mrp.production.inherited.form.mr</field>
+        <field name="model">mrp.production</field>
+        <field name="priority">64</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='action_assign']" position="after">
+                <button name="action_create_material_request_wizard" invisible="state not in ('draft','confirmed')" string="Create Material Request" type="object" data-hotkey="m"/>
+                <!-- <button name="action_receive_material_request_stock" class="oe_highlight" invisible="not receive_stock" string="Received" type="object" data-hotkey="m"/> -->
+            </xpath>
+            <xpath expr="//form" position="inside">
+                <field name="material_request_id" invisible="id" />
+                <field name="receive_stock" invisible="1"/>
+                <field name="requisition_id" invisible="1" />
+            </xpath>
+            <xpath expr="//field[@name='move_raw_ids']/tree/field[@name='product_id']" position="before">
+                <field name="product_qty_available" column_invisible="True"/>
+                 <field name="select_line" column_invisible="parent.state not in ('draft','confirmed')"/>
+            </xpath>
+             <xpath expr="//field[@name='move_raw_ids']/tree/field[@name='forecast_availability']" position="attributes">
+                 <attribute name="optional">show</attribute>
+            </xpath>
+            <xpath expr="//header/button[@name='action_confirm']" position="attributes">
+                <!-- <attribute name="invisible">components_availability_state !='available'</attribute> -->
+                <attribute name="context">{'user_click': True}</attribute>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+              <button class="oe_stat_button" name="action_view_material_request" type="object" icon="fa-book" string="Material Request" invisible="not material_request_id">
+              </button>
+                 <button class="oe_stat_button" name="action_view_purchase_request" type="object" icon="fa-book" string="Purchase Request" invisible="not requisition_id">
+              </button>
+            </xpath>
+             <xpath expr="//button[@name='action_generate_bom']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <field name="components_availability" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </field>
+             <field name="components_availability_state" position="attributes">
+                <attribute name="invisible">0</attribute>
+            </field>        
+        </field>
+    </record>
+</data></odoo>

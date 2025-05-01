@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="purchase_order_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="after">
+                    <widget invisible="approval_state != '1st_approve'" name="web_ribbon" title="1st Approve"/>
+                    <widget invisible="approval_state != '2nd_approve'" name="web_ribbon" title="2nd Approve"/>
+                    <widget invisible="approval_state != '3rd_approve'" name="web_ribbon" title="3rd Approve"/>
+                    <widget invisible="approval_state != '4th_approve'" name="web_ribbon" title="4th Approve"/>
+                    <widget invisible="approval_state != '5th_approve'" name="web_ribbon" title="5th Approve"/>
+                    <widget invisible="approval_state != 'approved'" name="web_ribbon" title="Approved"/>
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field invisible="1" name="approval_state"/>
+                </xpath>
+                <xpath expr="//button[@name='button_confirm']" position="after">
+                    <button class="btn-primary" invisible="approval_state != '1st_approve'" name="action_1st_approve" string="Approve" type="object"/>
+                    <button class="btn-primary" invisible="approval_state != '2nd_approve'" name="action_2nd_approve" string="Approve" type="object"/>
+                    <button class="btn-primary" invisible="approval_state != '3rd_approve'" name="action_3rd_approve" string="Approve" type="object"/>
+                    <button class="btn-primary" invisible="approval_state != '4th_approve'" name="action_4th_approve" string="Approve" type="object"/>
+                    <button class="btn-primary" invisible="approval_state != '5th_approve'" name="action_5th_approve" string="Approve" type="object"/>
+                </xpath></field>
+        </record>
+    </data>
+</odoo>

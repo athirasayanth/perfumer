@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record id="cdx_view_users_form_wh_inherit" model="ir.ui.view">
+        <field name="name">res.users.form.view.wh</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[@name='preferences']" position="after">
+                <page string="Warehouse Operations" name="warehouse_operation" >
+                    <group>
+                        <group>
+                            <field name="is_manager"/>
+                            <field name="is_production_manager"/>
+                            <field name="is_procurement_manager" />
+                            <field name="is_ce" />
+                            <field name="is_salesperson" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

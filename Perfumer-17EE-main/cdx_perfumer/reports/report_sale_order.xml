@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record id="action_report_pro_forma_invoice_bom" model="ir.actions.report">
+        <field name="name">PRO-FORMA Invoice (with BOM)</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">cdx_perfumer.report_saleorder_pro_forma_my</field>
+        <field name="report_file">sale.report_saleorder_pro_forma</field>
+        <field name="print_report_name">'PRO-FORMA - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="groups_id" eval="[(4, ref('sale.group_proforma_sales'))]"/>
+</record>
+
+<template id="report_saleorder_pro_forma_my">
+    <t t-call="web.html_container">
+        <t t-set="is_pro_forma_bom" t-value="True"/>
+        <t t-set="docs" t-value="docs.with_context(proforma=True)"/>
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="sale.report_saleorder_document" t-lang="doc.partner_id.lang"/>
+        </t>
+    </t>
+</template>
+
+<template id="report_saleorder_document_inherit_sale_management" inherit_id="sale.report_saleorder_document">
+    <xpath expr="//tr[hasclass('is-subtotal')]" position="attributes">
+        <attribute name="style">display:none;</attribute>
+    </xpath>
+    <xpath expr="//div[@name='so_total_summary']" position="before">
+        <div t-if="is_pro_forma_bom or not is_pro_forma">
+            <h4 name="h_optional_products">
+                <!-- <span>Options</span> -->
+            </h4>
+            <table name="estimation_lines_table" class="table table-sm">
+                <thead class="fw-bold">
+                    <tr>
+                        <td name="estimation_line_name" class="text-start">Description</td>
+                        <td  name="estimation_line_qty" class="text-start">Quantity</td>
+                        <!-- <td name="estimation_line_price" class="text-end">Total Price</td> -->
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <t t-foreach="lines_to_report" t-as="line">
+                        <tr t-if ="line.cdx_bom_id" t-foreach="line.cdx_bom_id.bom_line_ids" t-as="option">
+                            <t  t-set="total_price" t-value="option.product_id.list_price * option.product_qty"/>
+                            <td name="estimation_line_name_td" class="text-start">
+                                <span t-esc="option.product_id.name"/>
+                            </td>
+                            <td  name="estimation_line_qty_td" class="text-start">
+                                <strong >
+                                    <span t-field="option.product_qty"/>
+                                </strong>
+                            </td>
+                            <!-- <td name="estimation_line_price_td" class="text-end">
+                                <strong>
+                                    <span t-esc="total_price" />
+                                </strong>
+                            </td> -->
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+            <div class="oe_structure">&#8203;</div>
+        </div>
+    </xpath>
+
+        <xpath expr="//p[@t-if='not is_html_empty(doc.payment_term_id.note)']" position="after">
+            <t t-set="procurement_managers" t-value="env['res.users'].search([('is_procurement_manager', '=', True)],limit=1)"/>
+            <t t-set="chief_executives" t-value="env['res.users'].search([('is_ce', '=', True)],limit=1)"/>
+            <t t-set="sales_persons" t-value="env['res.users'].search([('is_salesperson', '=', True)],limit=1)"/>
+            <tr><strong>Authorized Signatories</strong></tr>
+            <table class="table table-sm mt-4" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 25%;">Name</th>
+                        <th class="text-center" style="width: 25%;">Position</th>
+                        <th class="text-center" style="width: 25%;">Signature</th>
+                        <th class="text-center" style="width: 25%;">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr t-if="sales_persons" style="height: 50px;">
+                        <td><span t-esc="sales_persons.name"/></td>
+                        <td><span>Sales Executive</span></td>
+                        <td><span></span></td>
+                        <td><span></span></td>
+                    </tr>
+                    <tr t-if="procurement_managers" style="height: 50px;">
+                        <td><span t-esc="procurement_managers.name"/></td>
+                        <td><span>Procurement Manager</span></td>
+                        <td><span></span></td>
+                        <td><span></span></td>
+                    </tr>
+                    <tr t-if="chief_executives" style="height: 50px;">
+                        <td><span t-esc="chief_executives.name"/></td>
+                        <td><span>Chief Executive (CE)</span></td>
+                        <td><span></span></td>
+                        <td><span></span></td>
+                    </tr>
+                </tbody>
+            </table>
+    </xpath>
+</template>
+</odoo>

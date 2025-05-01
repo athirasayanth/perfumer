@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cdx_estimation,cdx.estimation,model_cdx_estimation,,1,1,1,1
+access_cdx_estimation_line,cdx.estimation.line,model_cdx_estimation_line,,1,1,1,1
+access_sale_order_line_estimation,sale.order.line.estimation,model_sale_order_line_estimation,,1,1,1,1
+access_cdx_estimation_line_wizard,cdx.estimation.line.wizard,model_cdx_estimation_line_wizard,,1,1,1,1
+access_cdx_material_purchase_requisition,cdx.material.purchase.requisition,model_cdx_material_purchase_requisition,,1,1,1,1
+access_cdx_material_purchase_requisition_line,cdx.material.purchase.requisition.line,model_cdx_material_purchase_requisition_line,,1,1,1,1
+access_material_request,material.request,model_material_request,,1,1,1,1
+access_material_request_line,material.request.line,model_material_request_line,,1,1,1,1
+access_cdx_material_request_wizard,access_cdx_material_request_wizard,model_cdx_material_request_wizard,,1,1,1,1
+access_cdx_material_request_wizard_line,access_cdx_material_request_wizard_line,model_cdx_material_request_wizard_line,,1,1,1,1
+access_advance_payment_wizard,advance.payment.wizard,model_advance_payment_wizard,,1,1,1,1
+access_generate_bom_confirmation_wizard,generate.bom.confirmation.wizard,model_generate_bom_confirmation_wizard,,1,1,1,1

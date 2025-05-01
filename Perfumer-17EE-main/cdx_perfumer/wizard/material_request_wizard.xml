@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_material_request_wizard_form" model="ir.ui.view">
+            <field name="name">cdx.material.request.wizard.form</field>
+            <field name="model">cdx.material.request.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Material Request">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="type_of_request" readonly="is_multi_location_request == True" required="True"/>
+                                <field invisible="type_of_request != 'material'" name="location_id" readonly="1" required="type_of_request == 'material'"/>
+                                <field invisible="is_multi_location_request == True or type_of_request != 'material'" name="dest_location_id" required="type_of_request == 'material' and is_multi_location_request == False"/>
+                                <field invisible="is_multi_location_request == False" name="product_id" readonly="True"/>
+                                <field invisible="1" name="available_quantity"/>
+                                <field invisible="1" name="is_multi_location_request"/>
+                            </group>
+                            <group>
+                                <field name="origin"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="material" string="Materials">
+                                <field name="material_line" nolabel="1">
+                                    <tree editable="bottom" string="Materials">
+                                        <field force_save="1" name="product_id" readonly="1" required="1"/>
+                                        <field column_invisible="parent.is_multi_location_request == False" name="dest_location_id" required="parent.is_multi_location_request == True"/>
+                                        <field force_save="1" name="quantity"/>
+                                        <field force_save="1" name="product_uom_id"/>
+                                        <field help="Master on hand qty" name="on_hand" string="On Hand" widget="stock_availability_widget"/>
+                                        <field force_save="1" column_invisible="True" name="available_quantity"/>
+                                        <field force_save="1" column_invisible="True" name="mrp_material_line"/>
+                                        <field force_save="1" column_invisible="True" name="request_wizard_id"/>
+                                    </tree></field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <footer>
+                        <button class="oe_highlight" name="action_create_request" string="Request" type="object"/>
+                        <button class="btn-default" special="cancel" string="Cancel"/>
+                    </footer>
+                </form></field>
+        </record>
+    </data>
+</odoo>

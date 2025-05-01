@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<record id="view_form_estimation_selection" model="ir.ui.view">
+    <field name="name">estimation.line.form.selection</field>
+    <field name="model">cdx.estimation.line.wizard</field>
+    <field name="arch" type="xml">
+        <form string="Select Estimation Lines">
+            <sheet>
+                <group>
+                    <field name="estimation_line_ids" >
+                    <tree editable="bottom" string="Estimation Lines">
+                        <field name="product_id" readonly="1"/>
+                        <field name="display_type" invisible="1"/>
+                        <field name="product_uom_qty" invisible="display_type == 'line_section'"/>
+						<field name="price_subtotal"/>
+                        <field name="is_selected"/>
+                    </tree>
+                    </field>
+                </group>
+                <group>
+                    <field name="selected_total" readonly="1"/>
+                </group>
+            </sheet>
+            <footer>
+                <button name="action_confirm_selection" type="object" string="Confirm" class="btn-primary"/>
+                <button string="Cancel" class="btn-secondary" special="cancel"/>
+            </footer>
+        </form>
+    </field>
+</record>
+</data>
+</odoo>

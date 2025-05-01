@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+ <record id="view_sale_line_list_estimation_selection" model="ir.ui.view">
+            <field name="name">estimation.saleline.line.listselection</field>
+            <field name="model">sale.order.line.estimation</field>
+            <field name="arch" type="xml">
+                  <tree create="false" edit="false" string="Sale Order Line Estimation Lines" >
+                        <field name="sale_order_line_id" readonly="1"/>
+                        <field name="estimation_line_id" readonly="1"/>
+                        <field name="product_uom_qty"/>
+						<field name="total_price" sum="Show total"/>
+					</tree>
+        </field>
+        </record>
+</odoo>

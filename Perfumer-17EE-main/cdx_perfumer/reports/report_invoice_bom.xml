@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_invoice_bom" model="ir.actions.report">
+        <field name="name">Invoice (with BOM)</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">cdx_perfumer.report_invoice_bom_my</field>
+        <field name="report_file">cdx_perfumer.report_invoice_bom_my</field>
+        <field name="print_report_name">'INV- %s' % (object.name)</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_invoice_bom_my">
+        <t t-call="web.html_container">
+            <t t-set="is_invoice_bom" t-value="True"/>
+            <t t-foreach="docs" t-as="o">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+                <t t-if="o._get_name_invoice_report() == 'account.report_invoice_document'"
+                   t-call="account.report_invoice_document" t-lang="lang"/>
+            </t>
+        </t>
+    </template>
+    <template id="report_report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+        <xpath expr="//div[hasclass('row')][1]" position="replace">
+            <div class="row">
+                <t t-if="o.partner_shipping_id and (o.partner_shipping_id != o.partner_id)">
+                    <div class="col-6">
+                        <t t-set="information_block">
+                            <div groups="account.group_delivery_invoice_address" name="shipping_address_block">
+                                <strong>Shipping Address:</strong>
+                                <div t-field="o.partner_shipping_id"
+                                     t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+                            </div>
+                        </t>
+                    </div>
+                    <div class="col-6" name="address_not_same_as_shipping">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+<!--                            <div t-if="o.partner_id.vat" id="partner_vat_address_not_same_as_shipping">-->
+<!--                                <t t-if="o.company_id.account_fiscal_country_id.vat_label"-->
+<!--                                   t-out="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>-->
+<!--                                <t t-else="">Tax ID</t>:-->
+<!--                                <span t-field="o.partner_id.vat"/>-->
+<!--                            </div>-->
+                            Email :<span t-field="o.partner_id.email"/>
+                            <br/>
+                            Phone : <span t-field="o.partner_id.phone"/>
+                            <br/>
+                            TRN :<span t-field="o.partner_id.vat"/>
+                        </t>
+                    </div>
+                </t>
+                <t t-elif="o.partner_shipping_id and (o.partner_shipping_id == o.partner_id)">
+                    <div class="offset-col-6 col-6" name="address_same_as_shipping">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+<!--                            <div t-if="o.partner_id.vat" id="partner_vat_address_same_as_shipping">-->
+<!--                                <t t-if="o.company_id.account_fiscal_country_id.vat_label"-->
+<!--                                   t-out="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>-->
+<!--                                <t t-else="">Tax ID</t>:-->
+<!--                                <span t-field="o.partner_id.vat"/>-->
+<!--                            </div>-->
+                            Email :<span t-field="o.partner_id.email"/>
+                            <br/>
+                            Phone : <span t-field="o.partner_id.phone"/>
+                            <br/>
+                            TRN :<span t-field="o.partner_id.vat"/>
+                        </t>
+                    </div>
+                </t>
+                <t t-else="">
+                    <div class="offset-col-6 col-6" name="no_shipping">
+                        <t t-set="address">
+                            <address class="mb-0" t-field="o.partner_id"
+                                     t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;], &quot;no_marker&quot;: True}"/>
+<!--                            <div t-if="o.partner_id.vat" id="partner_vat_no_shipping">-->
+<!--                                <t t-if="o.company_id.account_fiscal_country_id.vat_label"-->
+<!--                                   t-out="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>-->
+<!--                                <t t-else="">Tax ID</t>:-->
+<!--                                <span t-field="o.partner_id.vat"/>-->
+<!--                            </div>-->
+                            Email :<span t-field="o.partner_id.email"/>
+                            <br/>
+                            Phone : <span t-field="o.partner_id.phone"/>
+                            <br/>
+                            TRN :<span t-field="o.partner_id.vat"/>
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </xpath>
+        <xpath expr="//div[@id='right-elements']" position="before">
+            <div t-if="is_invoice_bom and o.sale_order_count > 0">
+                <h4 name="h_optional_products">
+                    <!-- <span>Options</span> -->
+                </h4>
+                <table name="estimation_lines_table" class="table table-sm">
+                    <thead class="fw-bold">
+                        <tr>
+                            <td name="estimation_line_name" class="text-start">Description</td>
+                            <td name="estimation_line_qty" class="text-start">Quantity</td>
+                            <!-- <td name="estimation_line_price" class="text-end">Total Price</td> -->
+                        </tr>
+                    </thead>
+                    <tbody class="move_tbody">
+                        <t t-foreach="o.invoice_line_ids" t-as="line">
+                            <t t-if="line.sale_line_ids">
+                                <tr t-if="line.sale_line_ids[0].cdx_bom_id"
+                                    t-foreach="line.sale_line_ids[0].cdx_bom_id.bom_line_ids" t-as="option">
+                                    <t t-set="total_price" t-value="option.product_id.list_price * option.product_qty"/>
+                                    <td name="estimation_line_name_td" class="text-start">
+                                        <span t-esc="option.product_id.name"/>
+                                    </td>
+                                    <td name="estimation_line_qty_td" class="text-start">
+                                        <strong>
+                                            <span t-field="option.product_qty"/>
+                                        </strong>
+                                    </td>
+                                    <!-- <td name="estimation_line_price_td" class="text-end">
+                                        <strong>
+                                            <span t-esc="total_price"/>
+                                        </strong>
+                                    </td> -->
+                                </tr>
+                            </t>
+
+                        </t>
+                    </tbody>
+                </table>
+                <div class="oe_structure">&#8203;</div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

@@ -1,0 +1,17 @@
+<odoo>
+    <record id="view_generate_bom_confirmation_wizard" model="ir.ui.view">
+        <field name="name">generate.bom.confirmation.wizard.form</field>
+        <field name="model">generate.bom.confirmation.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Confirm BOM Generation">
+                <group name="abc" string="Are you sure you want to generate BOM?">
+                    
+                </group>
+                <footer>
+                    <button string="Yes" type="object" name="action_generate_bom" class="btn-primary"/>
+                    <button string="No" type="object" name="action_cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

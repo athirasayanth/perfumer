@@ -1,0 +1,7 @@
+<odoo>
+	<record id="estimation_comp_user_rule" model="ir.rule">
+        <field name="name">Estimation current user only</field>
+        <field name="model_id" ref="model_cdx_estimation"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+    </record>
+</odoo>

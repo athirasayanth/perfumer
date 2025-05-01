@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_material_request_form" model="ir.ui.view">
+            <field name="name">material.request.form</field>
+            <field name="model">material.request</field>
+            <field name="arch" type="xml">
+                <form string="Material Request">
+                    <header>
+                        <button class="oe_highlight" invisible="state not in ['draft']" name="action_request" string="Request" type="object"/>
+                        <button name="action_create_purchase_requisition" type="object" string="Create Purchase Requisition" class="btn-primary" invisible="state in ['approved','received','done']"/>
+                        <button class="oe_highlight" invisible="state != 'requested' or user_check_dest == False" name="action_approve" string="Approve" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'requested' or user_check_dest == False" name="action_decline" string="Decline" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'approved' or user_check_src == False" name="action_receive" string="Receive" type="object"/>
+                        <button class="oe_highlight" invisible="state != 'received' or user_check_src == False" name="action_done" string="Done" type="object"/>
+                        <field name="state" statusbar_visible="draft,requested,approved" widget="statusbar"/>
+                        
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" icon="fa-truck" id="stock_picking" name="open_entries" invisible="state not in ['requested','approved','received','done']" string="Stock Transfer" type="object">
+                            </button>
+                            <button class="oe_stat_button" icon="fa-book" id="purchase_requisition" name="action_open_purchase_requisition" invisible="not requisition_id" string="Purchase Requisition" type="object"></button>
+                            <button class="oe_stat_button" icon="fa-book" id="job_card" name="action_open_mrp_production" invisible="not job_id" string="Job" type="object"></button>
+                        </div>
+                        <div class="oe_title">
+                            <label for="name"/>
+                            <h2>
+                                <field name="name" readonly="1"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="location_id"/>
+                                <field name="create_uid"/>
+                                <field name="origin"/>
+                            </group>
+                            <group>
+                                <field name="dest_location_id"/>
+                                <field invisible="1" name="to_transit_picking_id"/>
+                                <field invisible="1" name="from_transit_picking_id"/>
+                                <field invisible="1" name="manual_creation"/>
+                                <field invisible="1" name="from_amr"/>
+                                <field invisible="0" name="src_user_id" readonly="1"/>
+                                <field invisible="0" name="dest_user_id" readonly="1"/>
+                                <field invisible="1" name="user_check_src"/>
+                                <field invisible="1" name="user_check_dest"/>
+                                <field name="requisition_id" invisible="True"/>
+                                <field name="job_id"/>
+                            </group>
+                            <notebook>
+                                <page name="material" string="Materials">
+                                    <field name="material_ids" nolabel="1" readonly="state in ['approved', 'done']">
+                                        <tree editable="top" readonly="parent.state in ['approved', 'done']" string="Materials">
+                                            <field name="select_line" readonly="parent.state not in ('draft','requested','approved')"/>
+                                            <field name="product_id" readonly="parent.state == 'approved'"/>
+                                            <field force_save="1" name="on_hand" readonly="1"  widget="stock_availability_widget"/>
+                                            <field column_invisible="True" name="pro_uom_id"/>
+                                            <field invisible="1" name="uom_po_id" column_invisible="1"/>
+                                            <field domain="[('id', 'in',[uom_po_id,pro_uom_id])]" name="product_uom_id" readonly="parent.state == 'approved'"/>
+                                            <field name="quantity" readonly="parent.state == 'approved'"/>
+                                            <field name="received_qty"/>
+                                        </tree></field>
+                                </page>
+                            </notebook>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form></field>
+        </record>
+        <record id="view_material_request_tree" model="ir.ui.view">
+            <field name="name">material.request.tree</field>
+            <field name="model">material.request</field>
+            <field name="arch" type="xml">
+                <tree default_order="create_date desc" string="Material Request">
+                    <field name="create_date"/>
+                    <field name="name"/>
+                    <field name="location_id"/>
+                    <field name="dest_location_id"/>
+                    <field name="create_uid"/>
+                    <field name="state"/>
+                </tree></field>
+        </record>
+        <record id="action_material_request" model="ir.actions.act_window">
+            <field name="name">Material Request</field>
+            <field name="res_model">material.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[(1,'=',1)]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create Material Request using the create button
+                </p></field>
+        </record>
+        <menuitem id="menu_mr"  name="Material Request"  web_icon="cdx_perfumer,static/description/estimation.png"/>
+        <menuitem action="action_material_request" id="menu_material_request_master" name="Material Request" parent="menu_mr" sequence="1"/>
+        <menuitem action="action_material_request" id="menu_mr_compute" parent="stock.menu_stock_warehouse_mgmt" sequence="136" />
+        <menuitem action="action_material_request" id="menu_mr_compute_mrp" parent="mrp.mrp_planning_menu_root" sequence="136" />
+
+    </data>
+</odoo>

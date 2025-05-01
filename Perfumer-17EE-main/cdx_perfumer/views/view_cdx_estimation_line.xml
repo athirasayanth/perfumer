@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Popup View to Select Estimation Line -->
+        <record id="view_estimation_selection" model="ir.ui.view">
+            <field name="name">estimation.line.selection</field>
+            <field name="model">cdx.estimation.line</field>
+            <field name="arch" type="xml">
+                <form string="Select Estimation Line">
+                    <sheet>
+                        <group>
+                            <field name="estimation_id" readonly="1"/>
+                            <field name="product_id"/>
+                            <field name="name"/>
+                            <field name="product_uom_qty"/>
+                            <field name="unit_cost_fc"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="action_add_estimation_line" type="object" string="Add to Sale Order" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="view_list_estimation_selection" model="ir.ui.view">
+            <field name="name">estimation.line..listselection</field>
+            <field name="model">cdx.estimation.line</field>
+            <field name="arch" type="xml">
+                  <tree editable="bottom" string="Estimation Lines" >
+                        <field name="display_type" invisible="1"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="product_uom_qty" invisible="display_type == 'line_section'"/>
+						<field name="price_subtotal"/>
+                        <button name="action_add_estimation_line" type="object" string="Add to Sale Order" class="btn-primary"/>
+					</tree>
+        </field>
+        </record>
+        <record id="action_estimation_line_selection" model="ir.actions.act_window">
+            <field name="name">Select Estimation Line</field>
+            <field name="res_model">cdx.estimation.line</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_list_estimation_selection"/>
+            <!-- <field name="target">new</field> -->
+        </record>
+    </data>
+</odoo>

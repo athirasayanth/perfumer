@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates id="template" xml:space="preserve">
+    <!-- Stock Availability Widget -->
+    <t t-name="cdx_iec_material_req.StockAvailabilityWidget" owl="1">
+        <div>
+            <a tabindex="0" t-on-click="showPopup" class="fa fa-area-chart" title="View Stock Availability"/>
+        </div>
+    </t>
+
+    <!-- Stock Availability Popup -->
+    <t t-name="cdx_iec_material_req.StockAvailabilityPopup" owl="1">
+        <div class="m-3">
+            <h6 class="text-center">Stock Availability</h6>
+            <table class="table table-borderless table-sm">
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Available Qty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="props.stockData" t-as="stock" t-key="stock.location_name">
+                        <tr>
+                            <td><t t-esc="stock.location_name"/></td>
+                             <td><t t-esc="stock.quantity"/></td>
+                        </tr>
+                    </t>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3"><strong>Total:</strong></td>
+                        <td><t t-esc="props.totalQty"/></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </t>
+</templates>

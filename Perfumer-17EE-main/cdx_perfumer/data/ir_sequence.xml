@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <record id="seq_estimation" model="ir.sequence">
+        <field name="name">Estimation</field>
+        <field name="code">estimation.code</field>
+        <field name="prefix">EST</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Purchase Requisition -->
+    <record id="ir_sequence_purchase_requisition" model="ir.sequence">
+        <field name="name">Purchase Requisition</field>
+        <field name="code">cdx.purchase.requisition.seq</field>
+        <field name="prefix">PR/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <!-- Manual MR -->
+    <record id="ir_sequence_manual_material_request" model="ir.sequence">
+        <field name="name">Material Request</field>
+        <field name="code">material.request</field>
+        <field name="prefix">MR/%(y)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+
+    <record id="notification_to_user_material_request" model="mail.activity.type">
+        <field name="name">Material Request Created</field>
+        <field name="icon">fa-pencil-square-o</field>
+        <field name="delay_count">5</field>
+        <field name="res_model">material.request</field>
+    </record>
+
+    <record id="cdx_job_card" model="mail.activity.type">
+        <field name="name">Job Card</field>
+        <field name="icon">fa-pencil-square-o</field>
+        <field name="delay_count">5</field>
+        <field name="res_model">mrp.production</field>
+    </record>
+    <record id="cdx_job_est" model="mail.activity.type">
+        <field name="name">Estimation</field>
+        <field name="icon">fa-pencil-square-o</field>
+        <field name="delay_count">5</field>
+        <field name="res_model">cdx.estimation</field>
+    </record>
+    <record id="cdx_pur_req" model="mail.activity.type">
+        <field name="name">Purchase Requisition</field>
+        <field name="icon">fa-pencil-square-o</field>
+        <field name="delay_count">5</field>
+        <field name="res_model">cdx.material.purchase.requisition</field>
+    </record>
+
+
+</odoo>

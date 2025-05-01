@@ -1,0 +1,63 @@
+<odoo>
+    <record id="view_crm_lead_form_inherit_shipping" model="ir.ui.view">
+        <field name="name">crm.lead.form.inherit.shipping</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- After the address fields -->
+            <xpath expr="//group[@name='lead_partner']" position="after">
+                <group string="Shipping Address Details">
+                    <field name="same_shipping_address"/>
+
+                    <label for="shipping_street" string="Shipping Address"/>
+                    <div class="o_address_format">
+                        <field name="shipping_street" placeholder="Street..." style="width:300px;"/>
+                        <field name="shipping_street2" placeholder="Street 2..." style="width:300px;"/>
+
+                        <div style="display:flex; gap:10px;">
+                            <field name="shipping_city" placeholder="City" style="width:200px;"/>
+                            <field name="shipping_state_id" placeholder="State" options="{'no_open': True}"
+                                   style="width:200px;"/>
+                            <field name="shipping_zip" placeholder="ZIP" style="width:150px;"/>
+                        </div>
+
+                        <field name="shipping_country_id" placeholder="Country" style="width:200px;"
+                               options="{'no_open': True, 'no_create': True}"/>
+                    </div>
+
+
+                </group>
+                <group string="Customer Information">
+                    <!--                    <field name="customer_category"/>-->
+                    <field name="customer_type"/>
+                    <field name="industry_type"/>
+                    <field name="customer_segment"/>
+                    <field name="source_id"/>
+                </group>
+
+                <group string="Financial Information">
+                    <field name="credit_limit"/>
+                    <field name="vat_number"/>
+                </group>
+                <group string="Contact Preferences">
+                    <field name="preferred_contact_method"/>
+                    <field name="marketing_opt_in"/>
+                </group>
+                <group string="Internal Tags and Notes">
+
+                    <field name="customer_id" readonly="1"/>
+                    <field name="first_contact_date" readonly="1"/>
+                    <field name="last_contact_date" readonly="1"/>
+                </group>
+
+
+            </xpath>
+
+        </field>
+    </record>
+
+    <reco
+
+
+</odoo>
