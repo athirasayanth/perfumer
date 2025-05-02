@@ -9,7 +9,7 @@
     "depends": ["base","crm","product","stock",'purchase_stock','sale','cdx_dynamic_approval','mrp','sale_management','hr_timesheet'],
     "data": [
         'data/ir_sequence.xml',
-        # 'data/sequence.xml',
+        'data/sequence.xml',
         'security/ir.model.access.csv',
         'security/ir_rule.xml',
         'views/crm_lead_view.xml',
