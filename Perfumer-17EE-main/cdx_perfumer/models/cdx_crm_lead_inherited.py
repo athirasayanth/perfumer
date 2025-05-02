@@ -102,17 +102,17 @@ class CrmLead(models.Model):
             self.shipping_zip = self.zip
             self.shipping_country_id = self.country_id
     #
-    # def create(self, vals):
-    #     if isinstance(vals, list):  # If vals is a list of dicts
-    #         for val in vals:
-    #             if val.get('customer_id', 'New') == 'New':
-    #                 val['customer_id'] = self.env['ir.sequence'].next_by_code('crm.lead.customer.id') or 'New'
-    #             if not val.get('first_contact_date'):
-    #                 val['first_contact_date'] = fields.Datetime.now()
-    #     else:  # Single dict
-    #         if vals.get('customer_id', 'New') == 'New':
-    #             vals['customer_id'] = self.env['ir.sequence'].next_by_code('crm.lead.customer.id') or 'New'
-    #         if not vals.get('first_contact_date'):
-    #             vals['first_contact_date'] = fields.Datetime.now()
-    #
-    #     return super(CrmLead, self).create(vals)
+    def create(self, vals):
+        if isinstance(vals, list):  # If vals is a list of dicts
+            for val in vals:
+                if val.get('customer_id', 'New') == 'New':
+                    val['customer_id'] = self.env['ir.sequence'].next_by_code('crm.lead.customer.id') or 'New'
+                if not val.get('first_contact_date'):
+                    val['first_contact_date'] = fields.Datetime.now()
+        else:  # Single dict
+            if vals.get('customer_id', 'New') == 'New':
+                vals['customer_id'] = self.env['ir.sequence'].next_by_code('crm.lead.customer.id') or 'New'
+            if not vals.get('first_contact_date'):
+                vals['first_contact_date'] = fields.Datetime.now()
+    
+        return super(CrmLead, self).create(vals)
